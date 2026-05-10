@@ -25,65 +25,108 @@ Project Structure
 │   └── RA-20260510-7731.json   # Sample assessment — Digital Lending Platform NBI
 ├── .gitignore
 └── README.md
-
-Usage
-Web App
-The workbench is fully self-contained in index.html. No build step, no npm install, no server required.
-bashgit clone https://github.com/mshermancyber/riskassessmentworkbench
-cd riskassessmentworkbench
-open index.html        # macOS
-xdg-open index.html    # Linux
 Or serve locally:
-bashpython3 -m http.server 8080
+
+```bash
+python3 -m http.server 8080
 # open http://localhost:8080
-Load the Sample Assessment
+```
 
-Open index.html
-Click Load JSON in the header
-Select sample/RA-20260510-7731.json
-Navigate through all 5 steps
-On Step 5 click Export as Formal Risk Opinion Memo → browser Print → Save as PDF
+### Load the Sample Assessment
 
-Export / Import Workflow
+1. Open `index.html`
+2. Click **Load JSON** in the header
+3. Select `sample/RA-20260510-7731.json`
+4. Navigate through all 5 steps
+5. On Step 5 click **Export as Formal Risk Opinion Memo** → browser Print → Save as PDF
 
-Export JSON — saves full assessment state as a timestamped JSON file named {ASSESSMENT-ID}.json
-Load JSON — restores all fields, control scores, and findings; all steps marked complete; jump to any step to edit
-JSON files are version-control friendly and suitable for storage in a risk management repository
+### Export / Import Workflow
 
-Offline Docx Generation (Node.js)
-Generates a fully formatted .docx memo from any assessment JSON using the docx library.
-bashnpm install docx
+- **Export JSON** — saves full assessment state as a timestamped JSON file named `{ASSESSMENT-ID}.json`
+- **Load JSON** — restores all fields, control scores, and findings; all steps marked complete; jump to any step to edit
+- JSON files are version-control friendly and suitable for storage in a risk management repository
+
+### Offline Docx Generation (Node.js)
+
+Generates a fully formatted `.docx` memo from any assessment JSON using the `docx` library.
+
+```bash
+npm install docx
 node build_memo.js sample/RA-20260510-7731.json ./RA-20260510-7731_Risk_Memo.docx
+```
 
-Assessment Methodology
-Risk Scoring
-DimensionScaleDescriptionInherent Risk1–5Risk absent any controls (Low → Critical)Control Effectiveness1–5Effectiveness of existing controls (Highly Effective → Ineffective)Residual Risk1–5Computed: round(inherent × (effectiveness/5) × 0.8 + (inherent × 0.2))
-Lines of Business
-LOBDescriptionRetail BankConsumer-facing banking products and servicesInvestment BankCapital markets, trading, and advisoryWealth ManagementPrivate banking and asset managementCorporate BankCommercial lending and transaction bankingFirmwideEnterprise technology and shared services
-NIST 800-53 Control Families Covered
-IDControl FamilyDomainACAccess ControlCyberAUAudit & AccountabilityCyberCAAssessment, Authorization & MonitoringGovernanceCMConfiguration ManagementInfrastructureCPContingency PlanningResilienceIAIdentification & AuthenticationCyberIRIncident ResponseCyberMAMaintenanceInfrastructureMPMedia ProtectionDataPEPhysical & Environmental ProtectionInfrastructurePLPlanningGovernancePSPersonnel SecurityGovernancePTPII Processing & TransparencyDataRARisk AssessmentGovernanceSASystem & Services AcquisitionApplicationSCSystem & Communications ProtectionCyberSISystem & Information IntegrityApplicationSRSupply Chain Risk ManagementGovernance
-Assessment Types Supported
+---
 
-New Business Initiative (NBI)
-Periodic Risk Review
-Targeted Control Assessment
-Strategic Business Risk Review
-Regulatory Impact Assessment
+## Assessment Methodology
 
+### Risk Scoring
 
-Sample Assessment
-The included sample (sample/RA-20260510-7731.json) models an NBI assessment of a cloud-native consumer lending platform:
+| Dimension | Scale | Description |
+|-----------|-------|-------------|
+| Inherent Risk | 1–5 | Risk absent any controls (Low → Critical) |
+| Control Effectiveness | 1–5 | Effectiveness of existing controls (Highly Effective → Ineffective) |
+| Residual Risk | 1–5 | Computed: `round(inherent × (effectiveness/5) × 0.8 + (inherent × 0.2))` |
 
-System: Digital Lending Platform
-LOB: Retail Bank
-Environment: Cloud (AWS)
-Data Classification: Highly Confidential — PII/PFI
-Key findings: Untested cloud DR, incomplete third-party risk assessments, ML model explainability gaps, partial MFA coverage on inference APIs
-Opinion: Needs Improvement — 3 Critical, 5 High residual risk findings
+### Lines of Business
 
+| LOB | Description |
+|-----|-------------|
+| Retail Bank | Consumer-facing banking products and services |
+| Investment Bank | Capital markets, trading, and advisory |
+| Wealth Management | Private banking and asset management |
+| Corporate Bank | Commercial lending and transaction banking |
+| Firmwide | Enterprise technology and shared services |
 
-JSON Schema
-json{
+### NIST 800-53 Control Families Covered
+
+| ID | Control Family | Domain |
+|----|---------------|--------|
+| AC | Access Control | Cyber |
+| AU | Audit & Accountability | Cyber |
+| CA | Assessment, Authorization & Monitoring | Governance |
+| CM | Configuration Management | Infrastructure |
+| CP | Contingency Planning | Resilience |
+| IA | Identification & Authentication | Cyber |
+| IR | Incident Response | Cyber |
+| MA | Maintenance | Infrastructure |
+| MP | Media Protection | Data |
+| PE | Physical & Environmental Protection | Infrastructure |
+| PL | Planning | Governance |
+| PS | Personnel Security | Governance |
+| PT | PII Processing & Transparency | Data |
+| RA | Risk Assessment | Governance |
+| SA | System & Services Acquisition | Application |
+| SC | System & Communications Protection | Cyber |
+| SI | System & Information Integrity | Application |
+| SR | Supply Chain Risk Management | Governance |
+
+### Assessment Types Supported
+
+- New Business Initiative (NBI)
+- Periodic Risk Review
+- Targeted Control Assessment
+- Strategic Business Risk Review
+- Regulatory Impact Assessment
+
+---
+
+## Sample Assessment
+
+The included sample (`sample/RA-20260510-7731.json`) models an NBI assessment of a cloud-native consumer lending platform:
+
+- **System:** Digital Lending Platform
+- **LOB:** Retail Bank
+- **Environment:** Cloud (AWS)
+- **Data Classification:** Highly Confidential — PII/PFI
+- **Key findings:** Untested cloud DR, incomplete third-party risk assessments, ML model explainability gaps, partial MFA coverage on inference APIs
+- **Opinion:** Needs Improvement — 3 Critical, 5 High residual risk findings
+
+---
+
+## JSON Schema
+
+```json
+{
   "meta": {
     "assessmentId": "RA-YYYYMMDD-XXXX",
     "exportedAt": "ISO 8601 timestamp",
@@ -116,18 +159,34 @@ json{
     "managementActions": "string"
   }
 }
+```
 
-Related Portfolio Projects
-ProjectDescriptionWaldoHuntGuided SPL generator for insider threat detection, CERT framework-alignedDLP Coverage WebInteractive 3D DLP policy coverage mapping toolepss_risk_metricKRI/KPI vulnerability risk metrics generator with EPSS + CISA KEV integration
+---
 
-Author
-Mark Sherman — Cyber Security Specialist, 19+ years in financial services risk governance
+## Related Portfolio Projects
 
-GitHub: @mshermancyber
-LinkedIn: mshermancyber
+| Project | Description |
+|---------|-------------|
+| [WaldoHunt](https://github.com/mshermancyber/waldohunt) | Guided SPL generator for insider threat detection, CERT framework-aligned |
+| [DLP Coverage Web](https://github.com/mshermancyber/dlp-coverage-web) | Interactive 3D DLP policy coverage mapping tool |
+| [epss_risk_metric](https://github.com/mshermancyber/epss_risk_metric) | KRI/KPI vulnerability risk metrics generator with EPSS + CISA KEV integration |
 
+---
 
-License
-GPL-3.0 — see LICENSE
+## Author
 
-This is a portfolio and educational project. It does not represent the views or methodologies of any employer, past or present.
+**Mark Sherman** — Cyber Security Specialist, 19+ years in financial services risk governance
+
+- GitHub: [@mshermancyber](https://github.com/mshermancyber)
+- LinkedIn: [mshermancyber](https://linkedin.com/in/mshermancyber)
+
+---
+
+## License
+
+GPL-3.0 — see [LICENSE](LICENSE)
+
+---
+
+*This is a portfolio and educational project. It does not represent the views or methodologies of any employer, past or present.*
+
