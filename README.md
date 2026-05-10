@@ -29,8 +29,8 @@ Project Structure
 Usage
 Web App
 The workbench is fully self-contained in index.html. No build step, no npm install, no server required.
-bashgit clone https://github.com/mshermancyber/2lod-risk-workbench
-cd 2lod-risk-workbench
+bashgit clone https://github.com/mshermancyber/riskassessmentworkbench
+cd riskassessmentworkbench
 open index.html        # macOS
 xdg-open index.html    # Linux
 Or serve locally:
