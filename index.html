@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2LoD Tech &amp; Cyber Risk Assessment Workbench</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100vh;background:#0a0d14;font-family:'Georgia',serif;color:#e8ecf4}
+body{padding:24px 16px 48px}
+:root{
+  --bg:#0f1117;--bg2:#161b25;--bg3:#1e2535;--bg4:#252d3d;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.15);
+  --text:#e8ecf4;--text2:#8a95a8;--text3:#5a6478;
+  --gold:#c9a227;--gold2:#a07d18;
+  --red:#e24b4a;--amber:#ef9f27;--green:#63c058;--teal:#1d9e75;--accent:#3d7fff;
+  --r:8px;--rl:12px;
+}
+.page-header{max-width:960px;margin:0 auto 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.page-title{font-size:13px;color:var(--text3);font-family:monospace;letter-spacing:0.8px;text-transform:uppercase}
+.page-links{display:flex;gap:12px}
+.page-links a{font-size:11px;color:var(--text3);font-family:monospace;text-decoration:none;letter-spacing:0.3px;transition:color 0.15s}
+.page-links a:hover{color:var(--gold)}
+.wb{max-width:960px;margin:0 auto;background:var(--bg);border:0.5px solid var(--border2);border-radius:var(--rl);overflow:hidden}
+.hdr{background:var(--bg2);border-bottom:0.5px solid var(--border2);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.hdr-l{display:flex;align-items:center;gap:10px}
+.logo{width:36px;height:36px;background:var(--gold);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo span{font-size:11px;font-weight:700;color:#1a1200;letter-spacing:0.5px;font-family:monospace}
+.hdr-t{font-size:12px;font-weight:500;color:var(--text2);letter-spacing:0.8px;text-transform:uppercase}
+.hdr-s{font-size:10px;color:var(--text3);margin-top:2px;font-family:monospace}
+.hdr-r{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.assess-id{font-size:10px;color:var(--text3);font-family:monospace}
+.io-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:var(--r);font-size:11px;font-family:monospace;letter-spacing:0.3px;cursor:pointer;border:0.5px solid var(--border2);background:var(--bg3);color:var(--text2);transition:all 0.15s}
+.io-btn:hover{background:var(--bg4);color:var(--text)}
+.io-btn.gold{background:rgba(201,162,39,0.12);border-color:rgba(201,162,39,0.3);color:var(--gold)}
+.io-btn.gold:hover{background:rgba(201,162,39,0.2)}
+.step-bar{display:flex;background:var(--bg3);border-bottom:0.5px solid var(--border)}
+.st{flex:1;padding:10px 8px;font-size:10px;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase;font-family:monospace;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;text-align:center}
+.st.active{color:var(--gold);border-bottom-color:var(--gold);background:var(--bg2)}
+.st.done{color:var(--teal)}
+.content{padding:24px}
+.sec-lbl{font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;font-family:monospace;margin-bottom:10px}
+.fg{margin-bottom:18px}
+label{font-size:12px;color:var(--text2);display:block;margin-bottom:6px;font-family:monospace}
+input[type=text],select,textarea{width:100%;background:var(--bg3);border:0.5px solid var(--border2);border-radius:var(--r);color:var(--text);font-size:13px;padding:9px 12px;font-family:monospace;outline:none;transition:border-color 0.2s}
+input[type=text]:focus,select:focus,textarea:focus{border-color:var(--accent)}
+select option{background:var(--bg3)}
+textarea{resize:vertical;min-height:70px;line-height:1.6}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:600px){.r2,.r3{grid-template-columns:1fr}}
+.btn{padding:9px 20px;border-radius:var(--r);font-size:12px;font-family:monospace;letter-spacing:0.5px;cursor:pointer;border:none;transition:all 0.15s}
+.btn-p{background:var(--gold);color:#1a1200;font-weight:700}
+.btn-p:hover{background:var(--gold2)}
+.btn-s{background:var(--bg3);color:var(--text2);border:0.5px solid var(--border2)}
+.btn-s:hover{background:var(--bg4);color:var(--text)}
+.btn-row{display:flex;justify-content:flex-end;gap:10px;margin-top:24px}
+.cc{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--rl);padding:16px;margin-bottom:14px;transition:border-color 0.2s}
+.cc:hover{border-color:var(--border2)}
+.c-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.c-id{font-size:10px;color:var(--gold);font-family:monospace;letter-spacing:0.5px}
+.c-name{font-size:13px;color:var(--text);margin-top:2px;font-weight:500}
+.c-desc{font-size:11px;color:var(--text3);margin-top:4px;line-height:1.5}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.sf label{font-size:10px;color:var(--text3);font-family:monospace;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:4px}
+.ss{background:var(--bg3);border:0.5px solid var(--border2);border-radius:var(--r);color:var(--text);font-size:12px;padding:7px 10px;font-family:monospace;width:100%;outline:none;cursor:pointer;transition:border-color 0.2s}
+.ss:focus{border-color:var(--accent)}
+.rb{height:4px;border-radius:2px;margin-top:8px;transition:all 0.4s;width:0%}
+.dtag{display:inline-block;padding:2px 8px;background:rgba(61,127,255,0.1);border:0.5px solid rgba(61,127,255,0.2);border-radius:3px;font-size:10px;color:#7aaeff;font-family:monospace}
+.warn{background:rgba(239,159,39,0.08);border:0.5px solid rgba(239,159,39,0.2);border-radius:var(--r);padding:10px 14px;font-size:12px;color:#efb95a;font-family:monospace;margin-bottom:16px;display:none}
+.prog-t{background:var(--bg3);height:3px;border-radius:2px;margin-bottom:20px}
+.prog-f{height:3px;border-radius:2px;background:var(--gold);transition:width 0.4s ease}
+.rt{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed}
+.rt th{text-align:left;padding:8px 10px;font-family:monospace;font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;border-bottom:0.5px solid var(--border2);font-weight:400;overflow:hidden}
+.rt td{padding:9px 10px;border-bottom:0.5px solid var(--border);color:var(--text);vertical-align:top;word-break:break-word}
+.rt tr:last-child td{border-bottom:none}
+.rt tr:hover td{background:var(--bg2)}
+.rsc{font-family:monospace;font-weight:700}
+.sc{color:#f08080}.sh{color:#efb95a}.sm{color:#d4b04a}.sl{color:#80d075}
+.eb{background:var(--bg2);border-left:3px solid var(--gold);border-radius:0 var(--r) var(--r) 0;padding:14px 18px;margin-bottom:16px}
+.eb p{font-size:13px;color:var(--text2);line-height:1.7}
+.mr{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.mc{background:var(--bg3);border-radius:var(--r);padding:12px;text-align:center;border:0.5px solid var(--border)}
+.mv{font-size:22px;font-family:monospace;font-weight:700}
+.ml{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;font-family:monospace;margin-top:4px}
+.divider{border:none;border-top:0.5px solid var(--border2);margin:18px 0}
+.stamp{display:inline-flex;align-items:center;gap:6px;background:rgba(29,158,117,0.1);border:0.5px solid rgba(29,158,117,0.3);border-radius:var(--r);padding:5px 12px;font-size:11px;color:#4dd4a0;font-family:monospace;letter-spacing:0.3px}
+.toast{background:rgba(29,158,117,0.12);border:0.5px solid rgba(29,158,117,0.3);border-radius:var(--r);padding:9px 14px;font-size:12px;color:#4dd4a0;font-family:monospace;margin-bottom:16px;display:none}
+.memo-status{background:var(--bg2);border:0.5px solid var(--border2);border-radius:var(--rl);padding:24px;margin-top:16px;text-align:center;display:none}
+.memo-spinner{width:32px;height:32px;border:2px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.memo-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(201,162,39,0.12);border:0.5px solid rgba(201,162,39,0.4);border-radius:var(--r);padding:12px 20px;font-size:13px;font-family:monospace;color:var(--gold);cursor:pointer;font-weight:700;letter-spacing:0.3px;transition:all 0.15s;width:100%;margin-top:14px}
+.memo-btn:hover{background:rgba(201,162,39,0.22)}
+.memo-btn:disabled{opacity:0.5;cursor:not-allowed}
+.memo-note{font-size:10px;color:var(--text3);font-family:monospace;margin-top:8px;text-align:center}
+.page-footer{max-width:960px;margin:28px auto 0;text-align:center;font-size:10px;color:var(--text3);font-family:monospace;letter-spacing:0.3px}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-title">2LoD Risk Assessment Workbench · v1.0</div>
+  <div class="page-links">
+    <a href="https://github.com/mshermancyber/2lod-risk-workbench" target="_blank">GitHub</a>
+    <a href="https://github.com/mshermancyber" target="_blank">@mshermancyber</a>
+    <a href="https://linkedin.com/in/mshermancyber" target="_blank">LinkedIn</a>
+  </div>
+</div>
+
+<div class="wb">
+  <div class="hdr">
+    <div class="hdr-l">
+      <div class="logo"><span>2LoD</span></div>
+      <div>
+        <div class="hdr-t">Tech &amp; Cyber Risk Assessment Workbench</div>
+        <div class="hdr-s">Independent 2nd Line · NIST SP 800-53 Rev. 5 · Risk Function Framework</div>
+      </div>
+    </div>
+    <div class="hdr-r">
+      <span class="assess-id" id="assess-id">—</span>
+      <button class="io-btn gold" onclick="exportJSON()"><i class="ti ti-download" style="font-size:13px"></i> Export JSON</button>
+      <button class="io-btn" onclick="document.getElementById('file-in').click()"><i class="ti ti-upload" style="font-size:13px"></i> Load JSON</button>
+      <input type="file" id="file-in" accept=".json" style="display:none" onchange="importJSON(this)">
+    </div>
+  </div>
+
+  <div class="step-bar">
+    <div class="st active" id="tab0" onclick="goStep(0)">01 · Subject</div>
+    <div class="st" id="tab1" onclick="goStep(1)">02 · Scoring</div>
+    <div class="st" id="tab2" onclick="goStep(2)">03 · Findings</div>
+    <div class="st" id="tab3" onclick="goStep(3)">04 · Register</div>
+    <div class="st" id="tab4" onclick="goStep(4)">05 · Summary</div>
+  </div>
+
+  <div class="content">
+    <div class="toast" id="toast"></div>
+    <div class="prog-t"><div class="prog-f" id="progress" style="width:5%"></div></div>
+
+    <!-- STEP 0: SUBJECT -->
+    <div id="step0">
+      <div class="sec-lbl">Assessment Subject</div>
+      <div class="r2">
+        <div class="fg"><label>System / Initiative Name</label><input type="text" id="sys-name" placeholder="e.g. Digital Lending Platform"/></div>
+        <div class="fg"><label>Line of Business</label>
+          <select id="sys-lob">
+            <option value="">Select LOB...</option>
+            <option>Retail Bank</option>
+            <option>Investment Bank</option>
+            <option>Wealth Management</option>
+            <option>Corporate Bank</option>
+            <option>Firmwide</option>
+          </select>
+        </div>
+      </div>
+      <div class="r3">
+        <div class="fg"><label>Assessment Type</label>
+          <select id="assess-type">
+            <option>New Business Initiative (NBI)</option>
+            <option>Periodic Risk Review</option>
+            <option>Targeted Control Assessment</option>
+            <option>Strategic Business Risk Review</option>
+            <option>Regulatory Impact Assessment</option>
+          </select>
+        </div>
+        <div class="fg"><label>Data Classification</label>
+          <select id="data-class">
+            <option>Highly Confidential — PII/PFI</option>
+            <option>Confidential — Internal</option>
+            <option>Restricted</option>
+            <option>Public</option>
+          </select>
+        </div>
+        <div class="fg"><label>Environment</label>
+          <select id="env">
+            <option>Cloud (AWS)</option>
+            <option>On-Premises</option>
+            <option>Hybrid</option>
+            <option>SaaS / Third-Party Hosted</option>
+          </select>
+        </div>
+      </div>
+      <div class="r2">
+        <div class="fg"><label>Assessed By (2LoD Officer)</label><input type="text" id="assessor" placeholder="e.g. M. Sherman, Tech Cyber Risk Officer"/></div>
+        <div class="fg"><label>Assessment Date</label><input type="text" id="assess-date" placeholder="e.g. 10 May 2026"/></div>
+      </div>
+      <div class="fg"><label>System / Initiative Description</label><textarea id="sys-desc" placeholder="Brief description of the technology, business process supported, and assessment scope..."></textarea></div>
+      <div class="btn-row"><button class="btn btn-p" onclick="goStep(1)">Begin Assessment →</button></div>
+    </div>
+
+    <!-- STEP 1: CONTROL SCORING -->
+    <div id="step1" style="display:none">
+      <div class="sec-lbl">NIST 800-53 Control Family Risk Scoring</div>
+      <div class="warn" id="score-warn">Please complete inherent risk ratings for all in-scope control families before proceeding.</div>
+      <div id="controls-list"></div>
+      <div class="btn-row">
+        <button class="btn btn-s" onclick="goStep(0)">← Back</button>
+        <button class="btn btn-p" onclick="validateAndNext()">Review Findings →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: FINDINGS -->
+    <div id="step2" style="display:none">
+      <div class="sec-lbl">Key Findings &amp; Observations</div>
+      <div class="fg"><label>Summary of Control Observations (2LoD Perspective)</label><textarea id="obs-summary" style="min-height:90px" placeholder="Summarize key thematic control observations identified during this assessment..."></textarea></div>
+      <div class="r2">
+        <div class="fg"><label>Regulatory / Policy Considerations</label><textarea id="reg-notes" style="min-height:75px" placeholder="Applicable regulatory guidance, examination handbook references, internal policy exceptions..."></textarea></div>
+        <div class="fg"><label>Emerging Risk Factors</label><textarea id="emerging-risk" style="min-height:75px" placeholder="AI/ML exposure, third-party concentration, geopolitical, cloud concentration..."></textarea></div>
+      </div>
+      <div class="r2">
+        <div class="fg"><label>Overall Risk Opinion</label>
+          <select id="overall-opinion">
+            <option value="">Select 2LoD opinion...</option>
+            <option value="satisfactory">Satisfactory — Controls effective, residual risk within appetite</option>
+            <option value="needs-improvement">Needs Improvement — Control gaps identified, management action required</option>
+            <option value="unsatisfactory">Unsatisfactory — Material control deficiencies, escalation warranted</option>
+          </select>
+        </div>
+        <div class="fg"><label>Recommended Management Actions</label><textarea id="mgmt-actions" style="min-height:75px" placeholder="Specific actions recommended to 1LoD management to remediate identified control gaps..."></textarea></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-s" onclick="goStep(1)">← Back</button>
+        <button class="btn btn-p" onclick="goStep(3)">Generate Risk Register →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: RISK REGISTER -->
+    <div id="step3" style="display:none">
+      <div class="sec-lbl">Independent Risk Register</div>
+      <div class="mr" id="reg-metrics"></div>
+      <div style="overflow-x:auto">
+        <table class="rt">
+          <thead><tr>
+            <th style="width:52px">ID</th>
+            <th style="width:150px">Control Family</th>
+            <th style="width:80px">Domain</th>
+            <th style="width:72px">Inherent</th>
+            <th style="width:92px">Control Eff.</th>
+            <th style="width:72px">Residual</th>
+            <th style="width:95px">Direction</th>
+            <th>Key Finding</th>
+          </tr></thead>
+          <tbody id="reg-body"></tbody>
+        </table>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-s" onclick="goStep(2)">← Back</button>
+        <button class="btn btn-p" onclick="goStep(4)">Generate Exec Summary →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: EXEC SUMMARY -->
+    <div id="step4" style="display:none">
+      <div class="sec-lbl">Executive Risk Assessment Summary</div>
+      <div id="exec-content"></div>
+      <div class="memo-status" id="memo-status">
+        <div class="memo-spinner"></div>
+        <div style="font-size:12px;color:var(--text2);font-family:monospace" id="memo-status-text">Generating memo...</div>
+      </div>
+      <button class="memo-btn" id="memo-btn" onclick="generateMemo()">
+        <i class="ti ti-file-text" style="font-size:15px"></i>
+        Export as Formal Risk Opinion Memo
+      </button>
+      <div class="memo-note">Opens a print-ready memo in a new tab — use browser Print → Save as PDF</div>
+      <div class="btn-row" style="margin-top:16px">
+        <button class="btn btn-s" onclick="goStep(3)">← Back</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="page-footer">
+  2LoD Tech &amp; Cyber Risk Assessment Workbench · Built by <a href="https://github.com/mshermancyber" style="color:var(--gold);text-decoration:none">@mshermancyber</a> · GPL-3.0
+</div>
+
+<script>
+const CONTROLS=[
+  {id:'AC',name:'Access Control',domain:'Cyber',desc:'IAM, least privilege, remote access, account lifecycle management'},
+  {id:'AU',name:'Audit & Accountability',domain:'Cyber',desc:'Audit logging, log integrity, system use monitoring, event review'},
+  {id:'CA',name:'Assessment, Authorization & Monitoring',domain:'Governance',desc:'Security assessments, authorization to operate, continuous monitoring'},
+  {id:'CM',name:'Configuration Management',domain:'Infrastructure',desc:'Baseline configs, change control, least functionality, software usage'},
+  {id:'CP',name:'Contingency Planning',domain:'Resilience',desc:'BCP/DR, backup procedures, system recovery, alternate processing sites'},
+  {id:'IA',name:'Identification & Authentication',domain:'Cyber',desc:'MFA, authenticator management, device identity, cryptographic modules'},
+  {id:'IR',name:'Incident Response',domain:'Cyber',desc:'Incident handling, monitoring, reporting, response testing, forensics'},
+  {id:'MA',name:'Maintenance',domain:'Infrastructure',desc:'Controlled maintenance, maintenance tools, remote maintenance oversight'},
+  {id:'MP',name:'Media Protection',domain:'Data',desc:'Media access, storage, transport, sanitization, data at rest protection'},
+  {id:'PE',name:'Physical & Environmental Protection',domain:'Infrastructure',desc:'Physical access controls, monitoring, emergency power, data center controls'},
+  {id:'PL',name:'Planning',domain:'Governance',desc:'Security/privacy plans, rules of behavior, baseline protection profiling'},
+  {id:'PS',name:'Personnel Security',domain:'Governance',desc:'Screening, termination, transfers, access agreements, third-party personnel'},
+  {id:'PT',name:'PII Processing & Transparency',domain:'Data',desc:'Consent management, purpose specification, privacy notice, data minimization'},
+  {id:'RA',name:'Risk Assessment',domain:'Governance',desc:'Risk assessment process, vulnerability monitoring, supply chain risk'},
+  {id:'SA',name:'System & Services Acquisition',domain:'Application',desc:'SDLC, developer security testing, supply chain controls, outsourcing'},
+  {id:'SC',name:'System & Communications Protection',domain:'Cyber',desc:'Network segmentation, denial of service protection, cryptography in transit'},
+  {id:'SI',name:'System & Information Integrity',domain:'Application',desc:'Flaw remediation, malicious code protection, security alerts, spam protection'},
+  {id:'SR',name:'Supply Chain Risk Management',domain:'Governance',desc:'Third-party risk, component authenticity, acquisition strategies, provenance'},
+];
+const SCORE_OPTS=['','1 — Low','2 — Moderate-Low','3 — Moderate','4 — High','5 — Critical'];
+const EFF_OPTS=['','1 — Highly Effective','2 — Effective','3 — Partially Effective','4 — Limited Effectiveness','5 — Ineffective'];
+const DIR_OPTS=['','Stable','Improving','Deteriorating','Insufficient Data'];
+let currentStep=0;
+const doneSteps=new Set();
+
+function genId(){const d=new Date();return 'RA-'+d.getFullYear()+('0'+(d.getMonth()+1)).slice(-2)+('0'+d.getDate()).slice(-2)+'-'+Math.floor(Math.random()*9000+1000);}
+document.getElementById('assess-id').textContent=genId();
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',2800);}
+
+function buildControls(){
+  const c=document.getElementById('controls-list');
+  if(c.children.length>0)return;
+  CONTROLS.forEach(ctrl=>{
+    const d=document.createElement('div');d.className='cc';
+    d.innerHTML=`
+      <div class="c-hdr">
+        <div>
+          <div class="c-id">NIST 800-53 · ${ctrl.id}</div>
+          <div class="c-name">${ctrl.name}</div>
+          <div class="c-desc">${ctrl.desc}</div>
+        </div>
+        <span class="dtag">${ctrl.domain}</span>
+      </div>
+      <div class="sg">
+        <div class="sf"><label>Inherent Risk</label>
+          <select class="ss" id="inh-${ctrl.id}" onchange="updateRes('${ctrl.id}')">
+            ${SCORE_OPTS.map(o=>`<option>${o}</option>`).join('')}
+          </select>
+        </div>
+        <div class="sf"><label>Control Effectiveness</label>
+          <select class="ss" id="eff-${ctrl.id}" onchange="updateRes('${ctrl.id}')">
+            ${EFF_OPTS.map(o=>`<option>${o}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:10px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <span style="font-size:10px;color:var(--text3);font-family:monospace;text-transform:uppercase;letter-spacing:0.5px">Residual Risk</span>
+          <span style="font-size:12px;font-family:monospace;font-weight:700" id="rv-${ctrl.id}">—</span>
+        </div>
+        <div class="rb" style="background:var(--bg4)" id="rb-${ctrl.id}"></div>
+      </div>
+      <div class="sg" style="margin-top:10px">
+        <div class="sf"><label>Risk Direction</label>
+          <select class="ss" id="dir-${ctrl.id}">${DIR_OPTS.map(o=>`<option>${o}</option>`).join('')}</select>
+        </div>
+        <div class="sf"><label>In Scope?</label>
+          <select class="ss" id="scope-${ctrl.id}">
+            <option value="yes">Yes — In Scope</option>
+            <option value="no">No — Not Applicable</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:10px">
+        <label style="font-size:10px;color:var(--text3);font-family:monospace;text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:4px">Key Finding / Observation</label>
+        <textarea id="find-${ctrl.id}" placeholder="Document control gap or observation for ${ctrl.name}..." style="min-height:50px;font-size:12px;width:100%;background:var(--bg3);border:0.5px solid var(--border2);border-radius:var(--r);color:var(--text);padding:8px 10px;font-family:monospace;outline:none;resize:vertical;line-height:1.5;transition:border-color 0.2s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border2)'"></textarea>
+      </div>`;
+    c.appendChild(d);
+  });
+}
+
+function getRes(inh,eff){
+  if(!inh||!eff)return null;
+  const i=parseInt(inh.charAt(0)),e=parseInt(eff.charAt(0));
+  return Math.min(5,Math.max(1,Math.round(i*(e/5)*0.8+(i*0.2))));
+}
+function scoreLabel(n){if(!n)return '—';if(n>=5)return 'Critical';if(n>=4)return 'High';if(n>=3)return 'Moderate';if(n>=2)return 'Mod-Low';return 'Low';}
+function scoreCls(n){if(!n)return '';if(n>=5)return 'sc';if(n>=4)return 'sh';if(n>=3)return 'sm';return 'sl';}
+function barColor(n){if(!n)return 'var(--bg4)';if(n>=5)return '#e24b4a';if(n>=4)return '#ef9f27';if(n>=3)return '#c9a227';return '#63c058';}
+function scoreHex(n){if(!n)return '#888';if(n>=5)return '#C0392B';if(n>=4)return '#D4790A';if(n>=3)return '#B8860B';return '#1E6B3C';}
+
+function updateRes(id){
+  const inh=document.getElementById('inh-'+id)?.value||'';
+  const eff=document.getElementById('eff-'+id)?.value||'';
+  const r=getRes(inh,eff);
+  const ve=document.getElementById('rv-'+id);
+  const be=document.getElementById('rb-'+id);
+  if(ve){ve.textContent=r?scoreLabel(r):'—';ve.className='rsc '+(r>=5?'sc':r>=4?'sh':r>=3?'sm':'sl');}
+  if(be){be.style.background=barColor(r);be.style.width=r?(r/5*100)+'%':'0%';}
+}
+
+function validateAndNext(){
+  const w=document.getElementById('score-warn');
+  let bad=false;
+  CONTROLS.forEach(c=>{if(document.getElementById('scope-'+c.id)?.value==='yes'&&!document.getElementById('inh-'+c.id)?.value)bad=true;});
+  if(bad){w.style.display='block';return;}
+  w.style.display='none';goStep(2);
+}
+
+function goStep(n){
+  if(n>0)doneSteps.add(n-1);
+  ['step0','step1','step2','step3','step4'].forEach((s,i)=>document.getElementById(s).style.display=i===n?'block':'none');
+  ['tab0','tab1','tab2','tab3','tab4'].forEach((t,i)=>{
+    const el=document.getElementById(t);
+    el.className='st'+(i===n?' active':doneSteps.has(i)?' done':'');
+  });
+  currentStep=n;
+  document.getElementById('progress').style.width=((n+1)/5*95)+'%';
+  if(n===1)buildControls();
+  if(n===3)buildRegister();
+  if(n===4)buildExec();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function collectState(){
+  buildControls();
+  const controls={};
+  CONTROLS.forEach(c=>{
+    controls[c.id]={
+      inherent:document.getElementById('inh-'+c.id)?.value||'',
+      effectiveness:document.getElementById('eff-'+c.id)?.value||'',
+      direction:document.getElementById('dir-'+c.id)?.value||'',
+      scope:document.getElementById('scope-'+c.id)?.value||'yes',
+      finding:document.getElementById('find-'+c.id)?.value||''
+    };
+  });
+  return {
+    meta:{assessmentId:document.getElementById('assess-id').textContent,exportedAt:new Date().toISOString(),version:'2.0'},
+    subject:{
+      name:document.getElementById('sys-name')?.value||'',
+      lob:document.getElementById('sys-lob')?.value||'',
+      assessmentType:document.getElementById('assess-type')?.value||'',
+      dataClassification:document.getElementById('data-class')?.value||'',
+      environment:document.getElementById('env')?.value||'',
+      assessor:document.getElementById('assessor')?.value||'',
+      date:document.getElementById('assess-date')?.value||'',
+      description:document.getElementById('sys-desc')?.value||''
+    },
+    controls,
+    findings:{
+      observations:document.getElementById('obs-summary')?.value||'',
+      regulatoryNotes:document.getElementById('reg-notes')?.value||'',
+      emergingRisk:document.getElementById('emerging-risk')?.value||'',
+      overallOpinion:document.getElementById('overall-opinion')?.value||'',
+      managementActions:document.getElementById('mgmt-actions')?.value||''
+    }
+  };
+}
+
+function exportJSON(){
+  const state=collectState();
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  const nm=(state.subject.name||'assessment').replace(/[^a-z0-9]/gi,'_').toLowerCase();
+  a.href=url;a.download=state.meta.assessmentId+'_'+nm+'.json';a.click();
+  URL.revokeObjectURL(url);
+  showToast('Assessment exported as JSON');
+}
+
+function setVal(id,val){const el=document.getElementById(id);if(el&&val!==undefined)el.value=val;}
+
+function loadState(state){
+  if(!state||!state.subject)return;
+  setVal('sys-name',state.subject.name);
+  setVal('sys-lob',state.subject.lob);
+  setVal('assess-type',state.subject.assessmentType);
+  setVal('data-class',state.subject.dataClassification);
+  setVal('env',state.subject.environment);
+  setVal('assessor',state.subject.assessor);
+  setVal('assess-date',state.subject.date);
+  setVal('sys-desc',state.subject.description);
+  if(state.meta?.assessmentId)document.getElementById('assess-id').textContent=state.meta.assessmentId;
+  if(state.findings){
+    setVal('obs-summary',state.findings.observations);
+    setVal('reg-notes',state.findings.regulatoryNotes);
+    setVal('emerging-risk',state.findings.emergingRisk);
+    setVal('overall-opinion',state.findings.overallOpinion);
+    setVal('mgmt-actions',state.findings.managementActions);
+  }
+  if(state.controls){
+    buildControls();
+    CONTROLS.forEach(c=>{
+      const d=state.controls[c.id];if(!d)return;
+      setVal('inh-'+c.id,d.inherent);setVal('eff-'+c.id,d.effectiveness);
+      setVal('dir-'+c.id,d.direction);setVal('scope-'+c.id,d.scope);
+      setVal('find-'+c.id,d.finding);updateRes(c.id);
+    });
+  }
+  doneSteps.add(0);doneSteps.add(1);doneSteps.add(2);
+  goStep(0);
+  showToast('Assessment loaded — '+state.meta.assessmentId);
+}
+
+function importJSON(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{loadState(JSON.parse(e.target.result));}
+    catch(err){showToast('Error: invalid JSON file');}
+  };
+  reader.readAsText(file);input.value='';
+}
+
+function buildRegister(){
+  const tbody=document.getElementById('reg-body');tbody.innerHTML='';
+  let cc=0,hc=0,mc=0,lc=0;
+  CONTROLS.forEach(c=>{
+    if(document.getElementById('scope-'+c.id)?.value!=='yes')return;
+    const inh=document.getElementById('inh-'+c.id)?.value||'';
+    const eff=document.getElementById('eff-'+c.id)?.value||'';
+    const dir=document.getElementById('dir-'+c.id)?.value||'—';
+    const find=document.getElementById('find-'+c.id)?.value||'—';
+    const r=getRes(inh,eff);const inhN=inh?parseInt(inh.charAt(0)):null;
+    if(r>=5)cc++;else if(r>=4)hc++;else if(r>=3)mc++;else if(r)lc++;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td class="rsc" style="color:var(--gold);font-size:10px">${c.id}</td>
+      <td style="font-size:11px">${c.name}</td>
+      <td><span class="dtag">${c.domain}</span></td>
+      <td class="rsc ${scoreCls(inhN)}">${inhN?scoreLabel(inhN):'—'}</td>
+      <td style="font-size:11px;color:var(--text2)">${eff?eff.split(' — ')[1]||eff:'—'}</td>
+      <td class="rsc ${scoreCls(r)}">${r?scoreLabel(r):'—'}</td>
+      <td style="font-size:11px;color:var(--text2)">${dir}</td>
+      <td style="font-size:11px;color:var(--text2)">${find}</td>`;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('reg-metrics').innerHTML=`
+    <div class="mc"><div class="mv" style="color:#f08080">${cc}</div><div class="ml">Critical</div></div>
+    <div class="mc"><div class="mv" style="color:#efb95a">${hc}</div><div class="ml">High</div></div>
+    <div class="mc"><div class="mv" style="color:#d4b04a">${mc}</div><div class="ml">Moderate</div></div>
+    <div class="mc"><div class="mv" style="color:#80d075">${lc}</div><div class="ml">Low</div></div>`;
+}
+
+function buildExec(){
+  const g=id=>document.getElementById(id)?.value||'';
+  const name=g('sys-name')||'[System Name]',lob=g('sys-lob')||'[LOB]',type=g('assess-type');
+  const assessor=g('assessor'),date=g('assess-date'),desc=g('sys-desc');
+  const obs=g('obs-summary'),reg=g('reg-notes'),emerging=g('emerging-risk');
+  const opinion=g('overall-opinion'),actions=g('mgmt-actions');
+  const assessId=document.getElementById('assess-id')?.textContent||'';
+  let cc=0,hc=0,mc=0,lc=0,tot=0;
+  CONTROLS.forEach(c=>{
+    if(document.getElementById('scope-'+c.id)?.value!=='yes')return;
+    const r=getRes(document.getElementById('inh-'+c.id)?.value||'',document.getElementById('eff-'+c.id)?.value||'');
+    if(r>=5)cc++;else if(r>=4)hc++;else if(r>=3)mc++;else if(r)lc++;if(r)tot++;
+  });
+  const oCol=opinion==='satisfactory'?'#80d075':opinion==='unsatisfactory'?'#f08080':'#efb95a';
+  const oTxt=opinion==='satisfactory'?'Satisfactory':opinion==='unsatisfactory'?'Unsatisfactory':'Needs Improvement';
+  document.getElementById('exec-content').innerHTML=`
+    <div style="background:var(--bg2);border:0.5px solid var(--border2);border-radius:var(--rl);padding:20px 24px;margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap;gap:12px">
+        <div>
+          <div style="font-size:10px;color:var(--text3);font-family:monospace;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:4px">Banking Corp — Risk Function</div>
+          <div style="font-size:17px;color:var(--text);font-weight:500">${name}</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:4px;font-family:monospace">${type} · ${lob}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:10px;color:var(--text3);font-family:monospace;margin-bottom:3px">${assessId}</div>
+          <div style="font-size:11px;color:var(--text2);font-family:monospace">${date}</div>
+          <div style="font-size:11px;color:var(--text2);font-family:monospace;margin-top:2px">${assessor}</div>
+        </div>
+      </div>
+      <hr class="divider" style="margin:12px 0">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+        <span style="font-size:10px;color:var(--text3);font-family:monospace;text-transform:uppercase;letter-spacing:0.5px">2LoD Risk Opinion:</span>
+        <span style="font-size:13px;font-weight:700;color:${oCol};font-family:monospace">${oTxt}</span>
+      </div>
+      ${desc?`<div class="eb" style="margin-bottom:16px"><p>${desc}</p></div>`:''}
+      <div style="font-size:10px;color:var(--text3);font-family:monospace;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Risk Profile</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px">
+        <div style="background:rgba(226,75,74,0.08);border:0.5px solid rgba(226,75,74,0.2);border-radius:var(--r);padding:10px;text-align:center"><div style="font-size:20px;font-family:monospace;font-weight:700;color:#f08080">${cc}</div><div style="font-size:10px;color:#f08080;font-family:monospace;margin-top:3px">Critical</div></div>
+        <div style="background:rgba(239,159,39,0.08);border:0.5px solid rgba(239,159,39,0.2);border-radius:var(--r);padding:10px;text-align:center"><div style="font-size:20px;font-family:monospace;font-weight:700;color:#efb95a">${hc}</div><div style="font-size:10px;color:#efb95a;font-family:monospace;margin-top:3px">High</div></div>
+        <div style="background:rgba(201,162,39,0.08);border:0.5px solid rgba(201,162,39,0.2);border-radius:var(--r);padding:10px;text-align:center"><div style="font-size:20px;font-family:monospace;font-weight:700;color:#d4b04a">${mc}</div><div style="font-size:10px;color:#d4b04a;font-family:monospace;margin-top:3px">Moderate</div></div>
+        <div style="background:rgba(99,192,88,0.08);border:0.5px solid rgba(99,192,88,0.2);border-radius:var(--r);padding:10px;text-align:center"><div style="font-size:20px;font-family:monospace;font-weight:700;color:#80d075">${lc}</div><div style="font-size:10px;color:#80d075;font-family:monospace;margin-top:3px">Low</div></div>
+      </div>
+      ${obs?`<div style="margin-bottom:14px"><div style="font-size:10px;color:var(--text3);font-family:monospace;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Control Observations</div><div class="eb"><p>${obs}</p></div></div>`:''}
+      ${reg?`<div style="margin-bottom:14px"><div style="font-size:10px;color:var(--text3);font-family:monospace;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Regulatory Considerations</div><div class="eb" style="border-left-color:#3d7fff"><p>${reg}</p></div></div>`:''}
+      ${emerging?`<div style="margin-bottom:14px"><div style="font-size:10px;color:var(--text3);font-family:monospace;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Emerging Risk Factors</div><div class="eb" style="border-left-color:#ef9f27"><p>${emerging}</p></div></div>`:''}
+      ${actions?`<div style="margin-bottom:14px"><div style="font-size:10px;color:var(--text3);font-family:monospace;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Recommended Management Actions</div><div class="eb" style="border-left-color:#e24b4a"><p>${actions}</p></div></div>`:''}
+      <hr class="divider" style="margin:16px 0">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+        <div class="stamp"><i class="ti ti-shield-check" style="font-size:14px"></i> Independent 2LoD Assessment Complete</div>
+        <div style="font-size:10px;color:var(--text3);font-family:monospace">${tot} control families assessed · NIST 800-53</div>
+      </div>
+    </div>`;
+  document.getElementById('memo-status').style.display='none';
+  const mb=document.getElementById('memo-btn');
+  mb.disabled=false;
+  mb.innerHTML='<i class="ti ti-file-text" style="font-size:15px"></i> Export as Formal Risk Opinion Memo';
+}
+
+async function generateMemo(){
+  const btn=document.getElementById('memo-btn');
+  const statusBox=document.getElementById('memo-status');
+  const statusText=document.getElementById('memo-status-text');
+  btn.disabled=true;
+  btn.innerHTML='<i class="ti ti-loader" style="font-size:15px"></i> Building memo...';
+  statusBox.style.display='block';
+  statusText.textContent='Collecting assessment data...';
+
+  const state=collectState();
+  const{meta,subject,controls,findings}=state;
+  const CMETA={AC:'Access Control',AU:'Audit & Accountability',CA:'Assessment, Authorization & Monitoring',CM:'Configuration Management',CP:'Contingency Planning',IA:'Identification & Authentication',IR:'Incident Response',MA:'Maintenance',MP:'Media Protection',PE:'Physical & Environmental Protection',PL:'Planning',PS:'Personnel Security',PT:'PII Processing & Transparency',RA:'Risk Assessment',SA:'System & Services Acquisition',SC:'System & Communications Protection',SI:'System & Information Integrity',SR:'Supply Chain Risk Management'};
+  const inScope=Object.entries(controls).filter(([,v])=>v.scope==='yes'&&v.inherent).map(([id,v])=>{const r=getRes(v.inherent,v.effectiveness);return{id,name:CMETA[id]||id,...v,residual:r,residualLabel:scoreLabel(r)};}).sort((a,b)=>(b.residual||0)-(a.residual||0));
+  const cc=inScope.filter(c=>c.residual>=5).length;
+  const hc=inScope.filter(c=>c.residual===4).length;
+  const mc=inScope.filter(c=>c.residual===3).length;
+  const lc=inScope.filter(c=>c.residual&&c.residual<=2).length;
+  const keyRisks=inScope.filter(c=>c.residual>=4);
+  const opinionMap={'satisfactory':'SATISFACTORY','needs-improvement':'NEEDS IMPROVEMENT','unsatisfactory':'UNSATISFACTORY'};
+  const opinionText=opinionMap[findings.overallOpinion]||'NEEDS IMPROVEMENT';
+  const opinionColor=findings.overallOpinion==='satisfactory'?'#1E6B3C':findings.overallOpinion==='unsatisfactory'?'#C0392B':'#B8860B';
+
+  statusText.textContent='Rendering memo...';
+
+  const registerRows=inScope.map((c,i)=>{
+    const inhN=c.inherent?parseInt(c.inherent.charAt(0)):null;
+    return `<tr style="background:${i%2===0?'#fff':'#F7F8FA'}">
+      <td style="padding:7px 10px;border:1px solid #e0e0e0;font-family:monospace;font-weight:700;color:#1B2E4B;font-size:11px">${c.id}</td>
+      <td style="padding:7px 10px;border:1px solid #e0e0e0;font-size:11px">${c.name}</td>
+      <td style="padding:7px 10px;border:1px solid #e0e0e0;font-size:11px;color:#4A5568">${c.domain||''}</td>
+      <td style="padding:7px 10px;border:1px solid #e0e0e0;font-family:monospace;font-weight:700;font-size:11px;color:${scoreHex(inhN)}">${inhN?scoreLabel(inhN):'—'}</td>
+      <td style="padding:7px 10px;border:1px solid #e0e0e0;font-size:11px;color:#4A5568">${c.effectiveness?c.effectiveness.split(' — ')[1]||c.effectiveness:'—'}</td>
+      <td style="padding:7px 10px;border:1px solid #e0e0e0;font-family:monospace;font-weight:700;font-size:11px;color:${scoreHex(c.residual)}">${c.residualLabel}</td>
+      <td style="padding:7px 10px;border:1px solid #e0e0e0;font-size:11px;color:${c.direction==='Deteriorating'?'#C0392B':c.direction==='Improving'?'#1E6B3C':'#4A5568'}">${c.direction||'—'}</td>
+      <td style="padding:7px 10px;border:1px solid #e0e0e0;font-size:10px;color:#1A1A1A;line-height:1.4">${(c.finding||'—').substring(0,220)}${(c.finding||'').length>220?'...':''}</td>
+    </tr>`;
+  }).join('');
+
+  const keyRiskCards=keyRisks.map(c=>`
+    <div style="margin-bottom:20px;border:1px solid #D0D4DC;border-radius:6px;overflow:hidden">
+      <div style="background:#1B2E4B;padding:10px 16px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-family:Arial,sans-serif;font-weight:700;font-size:13px;color:#fff">${c.id} — ${c.name}</span>
+        <span style="font-family:monospace;font-size:12px;font-weight:700;color:${scoreHex(c.residual)};background:rgba(255,255,255,0.1);padding:2px 10px;border-radius:3px">${c.residualLabel}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:#F7F8FA;border-bottom:1px solid #D0D4DC">
+        <div style="padding:10px 14px;border-right:1px solid #D0D4DC"><div style="font-size:10px;color:#4A5568;text-transform:uppercase;letter-spacing:0.5px;font-family:Arial,sans-serif;margin-bottom:4px">Inherent Risk</div><div style="font-family:monospace;font-weight:700;font-size:14px;color:${scoreHex(c.inherent?parseInt(c.inherent.charAt(0)):null)}">${c.inherent?scoreLabel(parseInt(c.inherent.charAt(0))):'—'}</div></div>
+        <div style="padding:10px 14px;border-right:1px solid #D0D4DC"><div style="font-size:10px;color:#4A5568;text-transform:uppercase;letter-spacing:0.5px;font-family:Arial,sans-serif;margin-bottom:4px">Control Effectiveness</div><div style="font-size:13px;color:#4A5568;font-family:Arial,sans-serif">${c.effectiveness?c.effectiveness.split(' — ')[1]||c.effectiveness:'—'}</div></div>
+        <div style="padding:10px 14px"><div style="font-size:10px;color:#4A5568;text-transform:uppercase;letter-spacing:0.5px;font-family:Arial,sans-serif;margin-bottom:4px">Risk Direction</div><div style="font-size:13px;color:${c.direction==='Deteriorating'?'#C0392B':c.direction==='Improving'?'#1E6B3C':'#4A5568'};font-family:Arial,sans-serif">${c.direction||'—'}</div></div>
+      </div>
+      <div style="padding:12px 16px;background:#fff"><div style="font-size:10px;color:#4A5568;text-transform:uppercase;letter-spacing:0.5px;font-family:Arial,sans-serif;margin-bottom:6px">Finding / Observation</div><div style="font-size:12px;color:#1A1A1A;line-height:1.65;font-family:Arial,sans-serif">${c.finding||'—'}</div></div>
+    </div>`).join('');
+
+  const actions=findings.managementActions.split(/\d+\.\s+/).map(s=>s.trim()).filter(Boolean);
+  const actionRows=actions.map((a,i)=>`<tr style="background:${i%2===0?'#fff':'#F7F8FA'}">
+    <td style="padding:9px 10px;border:1px solid #e0e0e0;font-family:monospace;font-weight:700;color:#1B2E4B;text-align:center;width:36px">${i+1}</td>
+    <td style="padding:9px 10px;border:1px solid #e0e0e0;font-size:12px;line-height:1.55">${a}</td>
+    <td style="padding:9px 10px;border:1px solid #e0e0e0;font-family:monospace;font-weight:700;font-size:11px;text-align:center;color:${i<3?'#C0392B':'#D4790A'};width:90px">${i<3?'Pre-Launch':'60 Days'}</td>
+  </tr>`).join('');
+
+  const memoHTML=`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Risk Assessment Memo — ${meta.assessmentId}</title>
+<style>
+@media print{body{margin:0}.no-print{display:none!important}@page{size:letter;margin:0.85in 0.9in}}
+body{font-family:Arial,sans-serif;font-size:12px;color:#1A1A1A;background:#fff;max-width:920px;margin:0 auto;padding:32px}
+h2{font-size:13px;font-weight:700;color:#1B2E4B;text-transform:uppercase;letter-spacing:0.8px;border-bottom:3px solid #1B2E4B;padding-bottom:6px;margin:28px 0 14px}
+p{margin:0 0 11px;line-height:1.65}
+table{width:100%;border-collapse:collapse;margin-bottom:16px}
+.page-break{page-break-before:always;margin-top:0}
+.print-btn{background:#1B2E4B;color:#fff;border:none;padding:11px 28px;font-size:13px;font-family:Arial,sans-serif;cursor:pointer;border-radius:4px;margin-bottom:28px;font-weight:700;letter-spacing:0.3px}
+.print-btn:hover{background:#2a4a70}
+</style></head><body>
+<button class="print-btn no-print" onclick="window.print()">Print / Save as PDF</button>
+
+<div style="text-align:center;margin-bottom:28px;border-bottom:4px double #1B2E4B;padding-bottom:22px">
+  <div style="font-size:11px;color:#4A5568;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">Banking Corp — Risk Function</div>
+  <div style="font-size:24px;font-weight:700;color:#1B2E4B;letter-spacing:0.5px">INTERNAL MEMORANDUM</div>
+  <div style="font-size:13px;color:#4A5568;margin-top:6px;font-style:italic">Second Line of Defense — Independent Technology &amp; Cyber Risk Assessment</div>
+</div>
+
+<table style="margin-bottom:26px">
+  <tr><td style="padding:5px 0;font-weight:700;color:#1B2E4B;width:130px;border:none">TO:</td><td style="padding:5px 0;border:none">${subject.lob} Technology Risk Committee; Chief Technology Officer</td></tr>
+  <tr><td style="padding:5px 0;font-weight:700;color:#1B2E4B;border:none">FROM:</td><td style="padding:5px 0;border:none">${subject.assessor} | Banking Corp — Risk Function</td></tr>
+  <tr><td style="padding:5px 0;font-weight:700;color:#1B2E4B;border:none">DATE:</td><td style="padding:5px 0;border:none">${subject.date}</td></tr>
+  <tr><td style="padding:5px 0;font-weight:700;color:#1B2E4B;border:none">RE:</td><td style="padding:5px 0;border:none">Independent Technology &amp; Cyber Risk Assessment — ${subject.name}</td></tr>
+  <tr><td style="padding:5px 0;font-weight:700;color:#1B2E4B;border:none">ASSESS. ID:</td><td style="padding:5px 0;font-family:monospace;border:none">${meta.assessmentId}</td></tr>
+  <tr><td style="padding:5px 0;font-weight:700;color:#1B2E4B;border:none">CLASS.:</td><td style="padding:5px 0;border:none">Confidential — Internal Distribution Only</td></tr>
+</table>
+
+<table style="margin-bottom:26px">
+  <tr>
+    <td style="background:#1B2E4B;padding:12px 20px;font-weight:700;font-size:12px;color:#fff;text-transform:uppercase;letter-spacing:0.5px;width:160px;border:none">2LoD Risk Opinion</td>
+    <td style="background:${opinionColor};padding:12px 20px;font-weight:700;font-size:17px;color:#fff;text-transform:uppercase;letter-spacing:1px;border:none">${opinionText}</td>
+  </tr>
+</table>
+
+<h2>1. Executive Summary</h2>
+<p>This memorandum presents the independent second line of defense (2LoD) technology and cybersecurity risk assessment of the <strong>${subject.name}</strong>, a ${subject.assessmentType.toLowerCase()} submitted by ${subject.lob} Technology. The assessment was conducted in accordance with the firm's Operational Risk Management Framework and evaluated the platform's control environment against the NIST Special Publication 800-53 (Rev. 5) control families.</p>
+<p>${subject.description}</p>
+<p>The assessment covered <strong>${inScope.length} NIST 800-53 control families</strong> and identified <strong>${cc} Critical</strong> and <strong>${hc} High</strong> residual risk areas requiring management action. The 2LoD risk opinion is <strong>${opinionText}</strong>.</p>
+
+<h2>2. Risk Profile Summary</h2>
+<table>
+  <tr>
+    <td style="text-align:center;padding:16px 10px;background:#FEF0F0;border-top:4px solid #C0392B;border:1px solid #e0e0e0"><div style="font-size:30px;font-weight:700;color:#C0392B;font-family:monospace">${cc}</div><div style="font-size:10px;color:#C0392B;text-transform:uppercase;letter-spacing:0.5px;margin-top:5px">Critical</div></td>
+    <td style="text-align:center;padding:16px 10px;background:#FEF7EC;border-top:4px solid #D4790A;border:1px solid #e0e0e0"><div style="font-size:30px;font-weight:700;color:#D4790A;font-family:monospace">${hc}</div><div style="font-size:10px;color:#D4790A;text-transform:uppercase;letter-spacing:0.5px;margin-top:5px">High</div></td>
+    <td style="text-align:center;padding:16px 10px;background:#FFFBEC;border-top:4px solid #B8860B;border:1px solid #e0e0e0"><div style="font-size:30px;font-weight:700;color:#B8860B;font-family:monospace">${mc}</div><div style="font-size:10px;color:#B8860B;text-transform:uppercase;letter-spacing:0.5px;margin-top:5px">Moderate</div></td>
+    <td style="text-align:center;padding:16px 10px;background:#EFF7F2;border-top:4px solid #1E6B3C;border:1px solid #e0e0e0"><div style="font-size:30px;font-weight:700;color:#1E6B3C;font-family:monospace">${lc}</div><div style="font-size:10px;color:#1E6B3C;text-transform:uppercase;letter-spacing:0.5px;margin-top:5px">Low / Mod-Low</div></td>
+    <td style="text-align:center;padding:16px 10px;background:#EEF2F7;border-top:4px solid #1B2E4B;border:1px solid #e0e0e0"><div style="font-size:30px;font-weight:700;color:#1B2E4B;font-family:monospace">${inScope.length}</div><div style="font-size:10px;color:#1B2E4B;text-transform:uppercase;letter-spacing:0.5px;margin-top:5px">Total Assessed</div></td>
+  </tr>
+</table>
+
+<h2>3. Assessment Scope &amp; Methodology</h2>
+<p><strong>Assessment Type:</strong> ${subject.assessmentType} &nbsp;&nbsp;&nbsp; <strong>Environment:</strong> ${subject.environment} &nbsp;&nbsp;&nbsp; <strong>Data Classification:</strong> ${subject.dataClassification}</p>
+<p>This assessment was conducted by the Banking Corp Risk Function as an independent 2LoD review. The evaluation encompassed review of control documentation, architecture artifacts, configuration evidence, and interviews with 1LoD Technology and Technology Risk Control personnel. Control effectiveness ratings reflect evidence reviewed at the time of assessment and are subject to revision as additional evidence is provided. Risk ratings are assigned on a 1–5 scale for inherent risk and control effectiveness, with residual risk computed as a function of inherent risk adjusted for control effectiveness.</p>
+
+<div class="page-break"></div>
+<h2>4. NIST 800-53 Control Family Risk Register</h2>
+<table>
+  <thead><tr style="background:#1B2E4B">
+    <th style="padding:8px 10px;color:#fff;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;text-align:left;border:1px solid #2a4a70;width:40px">ID</th>
+    <th style="padding:8px 10px;color:#fff;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;text-align:left;border:1px solid #2a4a70">Control Family</th>
+    <th style="padding:8px 10px;color:#fff;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;text-align:left;border:1px solid #2a4a70;width:65px">Domain</th>
+    <th style="padding:8px 10px;color:#fff;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;text-align:left;border:1px solid #2a4a70;width:65px">Inherent</th>
+    <th style="padding:8px 10px;color:#fff;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;text-align:left;border:1px solid #2a4a70;width:95px">Control Eff.</th>
+    <th style="padding:8px 10px;color:#fff;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;text-align:left;border:1px solid #2a4a70;width:65px">Residual</th>
+    <th style="padding:8px 10px;color:#fff;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;text-align:left;border:1px solid #2a4a70;width:80px">Direction</th>
+    <th style="padding:8px 10px;color:#fff;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;text-align:left;border:1px solid #2a4a70">Key Finding</th>
+  </tr></thead>
+  <tbody>${registerRows}</tbody>
+</table>
+
+<div class="page-break"></div>
+<h2>5. Key Risk Findings (Critical &amp; High — ${keyRisks.length} Control Families)</h2>
+${keyRiskCards}
+
+<h2>6. Thematic Control Observations</h2>
+<p>${findings.observations||'Not provided.'}</p>
+
+<h2>7. Regulatory Considerations</h2>
+<p>${findings.regulatoryNotes||'Not provided.'}</p>
+
+<h2>8. Emerging Risk Factors</h2>
+<p>${findings.emergingRisk||'Not provided.'}</p>
+
+<h2>9. Required Management Actions</h2>
+<table>
+  <thead><tr style="background:#1B2E4B">
+    <th style="padding:9px 10px;color:#fff;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;border:1px solid #2a4a70;width:36px">#</th>
+    <th style="padding:9px 10px;color:#fff;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;border:1px solid #2a4a70;text-align:left">Required Management Action</th>
+    <th style="padding:9px 10px;color:#fff;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;border:1px solid #2a4a70;width:90px">Priority</th>
+  </tr></thead>
+  <tbody>${actionRows}</tbody>
+</table>
+
+<h2>10. Conclusion &amp; 2LoD Opinion</h2>
+<p>Based on the findings of this independent assessment, the Banking Corp Risk Function assigns a risk opinion of <strong>${opinionText}</strong> to the ${subject.name} initiative. This opinion reflects the presence of ${cc} Critical and ${hc} High residual risk findings across the ${inScope.length} NIST 800-53 control families evaluated. Management action is required on all items listed in Section 9 prior to or within the stated timelines following production launch.</p>
+<p>This opinion is issued as of the assessment date noted above and is subject to revision upon receipt of updated evidence. The Risk Function reserves the right to issue a revised opinion or escalate to the Technology Risk Committee if required management actions are not completed within stated timelines.</p>
+
+<div style="margin-top:36px;border-top:2px solid #1B2E4B;padding-top:22px;display:grid;grid-template-columns:1fr 1fr;gap:24px">
+  <div>
+    <div style="font-size:11px;color:#4A5568;margin-bottom:8px">Issued by:</div>
+    <div style="font-size:15px;font-weight:700;color:#1B2E4B">${subject.assessor}</div>
+    <div style="font-size:11px;color:#4A5568;margin-top:4px">Banking Corp — Risk Function</div>
+    <div style="font-size:11px;color:#4A5568">Technology &amp; Cyber Risk — 2nd Line of Defense</div>
+  </div>
+  <div>
+    <div style="font-size:11px;color:#4A5568;margin-bottom:8px">Assessment Reference:</div>
+    <div style="font-size:15px;font-weight:700;color:#1B2E4B;font-family:monospace">${meta.assessmentId}</div>
+    <div style="font-size:11px;color:#4A5568;margin-top:4px">Date: ${subject.date}</div>
+    <div style="font-size:11px;color:#4A5568">LOB: ${subject.lob}</div>
+  </div>
+</div>
+<div style="margin-top:22px;border-top:1px solid #D0D4DC;padding-top:12px;font-size:10px;color:#4A5568;font-style:italic">CONFIDENTIAL — This document is intended solely for the named recipients and contains non-public risk assessment information. Distribution, reproduction, or disclosure to any other party is prohibited without prior written authorization from the Risk Function.</div>
+</body></html>`;
+
+  const win=window.open('','_blank');
+  if(win){
+    win.document.write(memoHTML);
+    win.document.close();
+    statusBox.style.display='none';
+    btn.disabled=false;
+    btn.innerHTML='<i class="ti ti-file-text" style="font-size:15px"></i> Export as Formal Risk Opinion Memo';
+    showToast('Memo opened — Print → Save as PDF');
+  } else {
+    statusText.textContent='Popup blocked — downloading as HTML...';
+    const blob=new Blob([memoHTML],{type:'text/html'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;a.download=meta.assessmentId+'_Risk_Memo.html';a.click();
+    URL.revokeObjectURL(url);
+    setTimeout(()=>{statusBox.style.display='none';btn.disabled=false;btn.innerHTML='<i class="ti ti-file-text" style="font-size:15px"></i> Export as Formal Risk Opinion Memo';},1500);
+    showToast('Downloaded — open in browser and Print to PDF');
+  }
+}
+</script>
+</body>
+</html>

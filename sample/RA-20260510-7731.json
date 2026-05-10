@@ -1,0 +1,152 @@
+{
+  "meta": {
+    "assessmentId": "RA-20260510-7731",
+    "exportedAt": "2026-05-10T13:45:22.000Z",
+    "version": "2.0"
+  },
+  "subject": {
+    "name": "Digital Lending Platform",
+    "lob": "Retail Bank",
+    "assessmentType": "New Business Initiative (NBI)",
+    "dataClassification": "Highly Confidential — PII/PFI",
+    "environment": "Cloud (AWS)",
+    "assessor": "M. Sherman, Tech Cyber Risk Officer",
+    "date": "10 May 2026",
+    "description": "Cloud-native consumer lending platform processing mortgage and personal loan applications for Banking Corp. Integrates with three external credit bureaus via API, stores PII/PFI at scale in a cloud environment, and leverages proprietary ML models for automated underwriting decisioning. This assessment covers the initial NBI review prior to the planned Q3 2026 production launch. Scope includes application tier, data layer, cloud infrastructure, and third-party integrations. Excludes downstream servicing systems pending a separate periodic review."
+  },
+  "controls": {
+    "AC": {
+      "inherent": "4 — High",
+      "effectiveness": "3 — Partially Effective",
+      "direction": "Deteriorating",
+      "scope": "yes",
+      "finding": "Privileged access to the production cloud environment lacks just-in-time provisioning controls. Standing access observed for 14 service accounts with broad IAM permissions. Role-based access control framework is defined but not consistently enforced across all application tiers. Separation of duties gaps identified between development and production environments."
+    },
+    "AU": {
+      "inherent": "4 — High",
+      "effectiveness": "2 — Effective",
+      "direction": "Stable",
+      "scope": "yes",
+      "finding": "CloudTrail logging enabled across all AWS services with centralized delivery to S3. Log retention meets 13-month policy requirement. SIEM integration in progress — estimated completion Q3 2026. Real-time alerting on privileged actions not yet operational. Log integrity controls (CloudTrail log file validation) confirmed enabled."
+    },
+    "CA": {
+      "inherent": "3 — Moderate",
+      "effectiveness": "3 — Partially Effective",
+      "direction": "Stable",
+      "scope": "yes",
+      "finding": "System Security Plan (SSP) drafted but not finalized at time of assessment. Authority to Operate (ATO) process initiated; expected completion 45 days prior to production launch. Continuous monitoring program defined at policy level; technical implementation of automated compliance checks against NIST baselines is incomplete. Third-party assessment of cloud controls not yet scheduled."
+    },
+    "CM": {
+      "inherent": "3 — Moderate",
+      "effectiveness": "2 — Effective",
+      "direction": "Stable",
+      "scope": "yes",
+      "finding": "Infrastructure-as-Code (Terraform) enforces approved baseline configurations for AWS resources. Change management process integrated with JIRA for audit trail. Container image scanning via Amazon ECR is enabled. Drift detection via AWS Config Rules confirmed operational. Minor gap: approved software list not yet formally documented for application-tier components."
+    },
+    "CP": {
+      "inherent": "5 — Critical",
+      "effectiveness": "4 — Limited Effectiveness",
+      "direction": "Deteriorating",
+      "scope": "yes",
+      "finding": "Business Continuity Plan (BCP) references legacy on-premises recovery procedures not applicable to cloud architecture. Disaster Recovery plan for cloud environment has not been tested. RTO of 4 hours and RPO of 1 hour defined but untested against cloud failure scenarios. Cross-region failover capability scoped for post-launch Phase 2. This represents a material gap for a platform processing high-volume consumer lending decisions."
+    },
+    "IA": {
+      "inherent": "5 — Critical",
+      "effectiveness": "3 — Partially Effective",
+      "direction": "Stable",
+      "scope": "yes",
+      "finding": "MFA enforced for all human access to AWS console and application administrative interfaces. Service-to-service authentication uses IAM roles — no hardcoded credentials detected in code review sample. Gap identified: ML model inference API endpoints authenticate via API key only; certificate-based mutual TLS not implemented. Password complexity policy meets minimum standards but does not enforce phishing-resistant authenticators (FIDO2/WebAuthn) for privileged users."
+    },
+    "IR": {
+      "inherent": "4 — High",
+      "effectiveness": "3 — Partially Effective",
+      "direction": "Stable",
+      "scope": "yes",
+      "finding": "Incident Response plan references firm-wide IR playbook but lacks cloud-specific runbooks for cloud environment. Technology has not conducted a tabletop exercise specific to this platform. Escalation paths to Legal and Risk Function defined. Integration with firm SIEM for automated alert triage is pending (see AU finding). Breach notification procedures for PII/PFI exposure align with firm policy and applicable state law requirements."
+    },
+    "MA": {
+      "inherent": "2 — Moderate-Low",
+      "effectiveness": "1 — Highly Effective",
+      "direction": "Stable",
+      "scope": "no",
+      "finding": ""
+    },
+    "MP": {
+      "inherent": "4 — High",
+      "effectiveness": "2 — Effective",
+      "direction": "Stable",
+      "scope": "yes",
+      "finding": "Data at rest encryption confirmed using AWS KMS with customer-managed keys (CMKs). Key rotation policy set to annual — recommend reducing to 90-day rotation given PII/PFI classification. S3 bucket policies enforce encryption in transit. PII/PFI tokenization implemented for credit bureau response data stored in RDS. Data retention and purge schedules defined in policy but automated enforcement not yet implemented."
+    },
+    "PE": {
+      "inherent": "1 — Low",
+      "effectiveness": "1 — Highly Effective",
+      "direction": "Stable",
+      "scope": "no",
+      "finding": "Physical and environmental controls are inherited from the cloud provider under their compliance authorization. No firm-owned physical infrastructure is in scope."
+    },
+    "PL": {
+      "inherent": "2 — Moderate-Low",
+      "effectiveness": "2 — Effective",
+      "direction": "Stable",
+      "scope": "yes",
+      "finding": "Security plan drafted and under review. Privacy impact assessment (PIA) completed for PII/PFI data flows. Rules of behavior acknowledged by all project team members. Privacy notice for end consumers reviewed by Legal — minor revisions requested regarding ML model use in credit decisioning disclosures."
+    },
+    "PS": {
+      "inherent": "3 — Moderate",
+      "effectiveness": "2 — Effective",
+      "direction": "Stable",
+      "scope": "yes",
+      "finding": "All internal personnel with access to production environment have completed background screening per firm HR policy. Third-party vendor (ML model development contractor) personnel access governed by MSA with background check requirement. Access termination procedures confirmed automated via HR system integration. No exceptions identified at time of assessment."
+    },
+    "PT": {
+      "inherent": "5 — Critical",
+      "effectiveness": "3 — Partially Effective",
+      "direction": "Deteriorating",
+      "scope": "yes",
+      "finding": "Platform processes highly sensitive PII/PFI including SSN, income, employment, and credit data for consumer lending decisions. Data minimization controls partially implemented — application collects fields not confirmed as required for underwriting. Consumer consent framework meets applicable regulatory requirements but does not address emerging state-level AI transparency laws. ML model explainability documentation is insufficient to support adverse action notice requirements under applicable consumer credit regulations."
+    },
+    "RA": {
+      "inherent": "3 — Moderate",
+      "effectiveness": "2 — Effective",
+      "direction": "Stable",
+      "scope": "yes",
+      "finding": "Threat model completed for application and data tiers using STRIDE methodology. Vulnerability scanning integrated into CI/CD pipeline via Amazon Inspector. EPSS-informed prioritization in use for remediation triage. Supply chain risk assessment for third-party libraries pending completion. No critical open vulnerabilities identified at time of assessment; 3 high-severity findings in remediation."
+    },
+    "SA": {
+      "inherent": "4 — High",
+      "effectiveness": "3 — Partially Effective",
+      "direction": "Stable",
+      "scope": "yes",
+      "finding": "Secure SDLC policy requires security review gates at design, build, and pre-production phases. Static application security testing (SAST) integrated into pipeline. Dynamic testing (DAST) scheduled pre-launch but not yet completed. Third-party penetration test scoped for Q2 2026 — results pending. ML model development lifecycle lacks formal security and bias review process; recommend formal AI/ML SDLC controls prior to production launch."
+    },
+    "SC": {
+      "inherent": "4 — High",
+      "effectiveness": "2 — Effective",
+      "direction": "Stable",
+      "scope": "yes",
+      "finding": "VPC architecture implements network segmentation with private subnets for application and data tiers. Security groups follow least-privilege ingress/egress rules. TLS 1.2 minimum enforced for all external API connections; TLS 1.3 preferred configuration in progress. AWS WAF deployed at API Gateway. DDoS protection via AWS Shield Standard — recommend upgrade to Shield Advanced given platform criticality. Internal service mesh encryption not yet implemented."
+    },
+    "SI": {
+      "inherent": "4 — High",
+      "effectiveness": "3 — Partially Effective",
+      "direction": "Stable",
+      "scope": "yes",
+      "finding": "Patch management SLA defined: critical within 7 days, high within 30 days. Amazon Inspector provides continuous vulnerability detection for EC2 and container images. Malware protection via Amazon GuardDuty enabled. Flaw remediation metrics tracked but not yet reported to 2LoD on a regular cadence. ML model monitoring for drift and performance degradation is implemented but thresholds for alert escalation not formally defined or tested."
+    },
+    "SR": {
+      "inherent": "5 — Critical",
+      "effectiveness": "4 — Limited Effectiveness",
+      "direction": "Deteriorating",
+      "scope": "yes",
+      "finding": "Platform relies on three external credit bureau API integrations and one ML model development vendor with access to production training data. Third-party risk assessments (TPRA) completed for credit bureaus — rated Moderate risk. ML vendor TPRA in progress; contractual right-to-audit clause not yet executed. Software Bill of Materials (SBOM) not produced for application components. Open-source library dependency review identified 2 packages with known CVEs awaiting remediation. Supply chain controls represent the highest concentration of residual risk in this assessment."
+    }
+  },
+  "findings": {
+    "observations": "This NBI assessment identified material control gaps across five NIST 800-53 control families warranting management action prior to the Q3 2026 production launch. The highest-risk areas are Contingency Planning (untested DR in cloud environment), Supply Chain Risk Management (incomplete third-party assessments and absent SBOM), PII Processing & Transparency (ML model explainability gaps with regulatory implications under applicable consumer credit and AI transparency laws), and Identification & Authentication (partial MFA coverage on ML inference APIs). Access Control standing privilege issues present elevated insider threat exposure given the PII/PFI data classification. Positively, foundational controls in Configuration Management, Audit & Accountability, and Physical & Environmental Protection are well-implemented. The platform's cloud-native architecture leverages cloud-native security services effectively where controls have been deployed.",
+    "regulatoryNotes": "Assessment notes the following regulatory considerations: (1) Emerging model risk management guidance for consumer lending will require enhanced explainability and adverse action documentation for ML-driven underwriting decisions — current PT and SA gaps are directly relevant. (2) State-level AI transparency laws and bias audit requirements may apply depending on geographic rollout scope. (3) Cloud computing examination guidance requires a documented responsibility matrix for controls inherited from the cloud provider vs. firm-owned — SSP completion is a prerequisite. (4) Third-party risk management regulatory expectations apply to credit bureau and ML vendor relationships.",
+    "emergingRisk": "Two emerging risk factors noted outside the current control inventory: (1) ML Model Adversarial Risk — the underwriting model has not been assessed for adversarial input manipulation or prompt injection-style attacks on model APIs, representing an unquantified exposure as the attack surface for AI systems in financial services continues to evolve. (2) Cloud Concentration Risk — the platform's single-region deployment creates concentration exposure; cross-region failover architecture should be incorporated into the DR plan prior to launch given the criticality of consumer lending decisioning continuity.",
+    "overallOpinion": "needs-improvement",
+    "managementActions": "1. Contingency Planning: Complete and test cloud-native DR plan against cloud failure scenarios prior to production launch. Validate RTO/RPO targets through live failover exercise. Target: 30 days pre-launch. 2. Supply Chain: Complete TPRA for ML development vendor and execute right-to-audit clause. Produce SBOM for all application components. Remediate identified open-source CVEs. Target: 45 days pre-launch. 3. PII/PT: Engage Legal and Compliance to assess adverse action notice obligations relative to ML model explainability under applicable consumer credit regulations. Document model decision rationale capability prior to launch. Address data minimization gaps by removing non-required fields from intake forms. Target: 30 days pre-launch. 4. Access Control: Implement just-in-time privileged access for the production cloud environment. Remediate standing service account permissions in line with least privilege. Target: 60 days. 5. Incident Response: Develop cloud-specific IR runbooks for cloud environment and conduct tabletop exercise with Technology and Risk Function participation prior to launch. Target: 30 days pre-launch."
+  }
+}
