@@ -1,30 +1,61 @@
-# riskassessmentworkbench
-Independent 2LoD tech &amp; cyber risk assessment workbench aligned to NIST SP 800-53 Rev. 5. Covers 18 control families with inherent/residual scoring, generates a color-coded risk register, and exports a print-ready formal risk opinion memo. JSON import/export for versioning. Built to reflect real financial services 2LoD governance workflows.
+# 2LoD Tech & Cyber Risk Assessment Workbench
 
-Overview
+**Independent 2nd Line of Defense risk assessment tool for technology and cybersecurity risk governance.**
+
+Built by a Cyber Security Specialist with 19+ years in Tier 1 financial services risk governance. Designed to reflect real 2LoD independent assessment workflows as practiced in Risk Function/operational risk teams at large financial institutions.
+
+[![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
+
+---
+
+## Overview
+
 A browser-based, zero-dependency risk assessment workbench that walks a 2LoD risk officer through a structured independent technology and cybersecurity risk assessment aligned to NIST SP 800-53 (Rev. 5) control families. Produces a risk register with inherent/residual scoring and a print-ready formal risk opinion memo.
+
 This is a portfolio project demonstrating 2LoD risk governance methodology, not a production enterprise tool.
 
-Features
+---
 
-5-step guided assessment workflow — Subject intake, NIST 800-53 control scoring, findings capture, risk register, executive summary
-18 NIST 800-53 control families — Full Rev. 5 coverage across Cyber, Data, Infrastructure, Application, Governance, and Resilience domains
-Residual risk engine — Auto-calculates residual risk from inherent rating × control effectiveness with live color-coded indicator bars
-Independent Risk Register — Sorted by residual severity, color-coded Critical/High/Moderate/Low
-Formal Risk Opinion Memo export — Generates a print-ready HTML memo styled to bank risk management standards; opens in new tab for browser Print → Save as PDF
-JSON export/import — Full assessment state serialized to JSON for versioning, sharing, and re-editing; round-trip load restores all fields and scores
-Node.js docx generator — Offline script produces a fully formatted Word memo from any assessment JSON
-Sample assessment file — Realistic NBI assessment for a cloud-native lending platform included for testing
+## Features
 
+- **5-step guided assessment workflow** — Subject intake, NIST 800-53 control scoring, findings capture, risk register, executive summary
+- **18 NIST 800-53 control families** — Full Rev. 5 coverage across Cyber, Data, Infrastructure, Application, Governance, and Resilience domains
+- **Residual risk engine** — Auto-calculates residual risk from inherent rating × control effectiveness with live color-coded indicator bars
+- **Independent Risk Register** — Sorted by residual severity, color-coded Critical/High/Moderate/Low
+- **Formal Risk Opinion Memo export** — Generates a print-ready HTML memo styled to bank risk management standards; opens in new tab for browser Print → Save as PDF
+- **JSON export/import** — Full assessment state serialized to JSON for versioning, sharing, and re-editing; round-trip load restores all fields and scores
+- **Node.js docx generator** — Offline script produces a fully formatted Word memo from any assessment JSON
+- **Sample assessment file** — Realistic NBI assessment for a cloud-native lending platform included for testing
 
-Project Structure
-2lod-risk-workbench/
+---
+
+## Project Structure
+
+```
+riskassessmentworkbench/
 ├── index.html              # Main application (self-contained, no build step)
 ├── build_memo.js           # Node.js docx memo generator (offline/CI use)
 ├── sample/
 │   └── RA-20260510-7731.json   # Sample assessment — Digital Lending Platform NBI
 ├── .gitignore
 └── README.md
+```
+
+---
+
+## Usage
+
+### Web App
+
+The workbench is fully self-contained in `index.html`. No build step, no npm install, no server required.
+
+```bash
+git clone https://github.com/mshermancyber/riskassessmentworkbench
+cd riskassessmentworkbench
+open index.html        # macOS
+xdg-open index.html    # Linux
+```
+
 Or serve locally:
 
 ```bash
